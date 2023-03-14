@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  find-drug-redis:
+    container_name: find-drug-redis
+    build:
+      dockerfile: Dockerfile
+      context: ./redis
+    image: epikeran/find-drug-redis
+    ports:
+      - "6379:6379"
+  find-drug-database:
+    container_name: find-drug-database
+    build:
+      dockerfile: Dockerfile
+      context: ./database
+    image: epikeran/find-drug-database
+    environment:
+      - MARIADB_DATABASE=find-drug
+      - MARIADB_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    volumes:
+      - ./database/config:/etc/mysql/conf.d
+    ports:
+      - "3306:3306"
